@@ -599,6 +599,7 @@ const initBuffers = () => {
 }
 
 let rR = 0
+let rSquare = 0
 let movementXR = 0.01
 let movementYR = 0.01
 let movementZR = 0.01
@@ -649,7 +650,7 @@ const drawScene = () => {
 
     mvPushMatrix()
 
-    mat4.rotate(mvMatrix, mvMatrix, glMatrix.toRadian(0), [0.0, 1.0, 0.0])
+    //mat4.rotate(mvMatrix, mvMatrix, glMatrix.toRadian(rSquare), [0.0, 0.1, 0.0])
     mat4.translate(mvMatrix, mvMatrix, [-0.5, 0.0, -0.5])
     
     gl.bindBuffer(gl.ARRAY_BUFFER, CubePositionBuffer)
@@ -673,14 +674,19 @@ const drawScene = () => {
 
 let lastTime = 0
 
+const updateRPos = () => {
+    movementXR += (arahX * 0.1)
+    movementYR += (arahY * 0.1)
+    movementZR += (arahZ * 0.1)
+}
+
 const animate = () => {
     let timeNow = new Date().getTime()
     if(lastTime != 0){
         let elapsed = timeNow - lastTime
         rR += (100 * elapsed) / 1000.0
-        movementXR += (arahX * 0.1)
-        movementYR += (arahY * 0.1)
-        movementZR += (arahZ * 0.1)
+        rSquare += (100 * elapsed) / 1000.0
+        updateRPos()
     }
     lastTime = timeNow
 }
@@ -718,10 +724,12 @@ const detect_collision = (current_position_r, current_position_cube) => {
         if(!(
             current_position_r[i][1] <= current_position_cube[2][1] 
         )){
-            arahY *= -1.0
-            rotater *= -1.0
-            movementYR += (arahY)
-            console.log('front')
+            if(arahY > 0){
+                arahY *= -1.0
+                rotater *= -1.0
+                updateRPos()
+                console.log('front')
+            }
             return false
         }
     }
@@ -730,10 +738,12 @@ const detect_collision = (current_position_r, current_position_cube) => {
         if(!(
             current_position_r[i][1] >= current_position_cube[4][1]
         )){
-            arahY *= -1.0
-            rotater *= -1.0
-            movementYR += (arahY)
-            console.log('back')
+            if(arahY < 0){
+                arahY *= -1.0
+                rotater *= -1.0
+                updateRPos()
+                console.log('back')
+            }
             return false
         }
     }
@@ -742,10 +752,12 @@ const detect_collision = (current_position_r, current_position_cube) => {
         if(!(
             current_position_r[i][2] <= current_position_cube[3][2]
         )){
-            arahZ *= -1.0
-            rotater *= -1.0
-            movementZR += (arahZ)
-            console.log('top')
+            if(arahZ > 0) {
+                arahZ *= -1.0
+                rotater *= -1.0
+                updateRPos()
+                console.log('top')
+            }
             return false
         }
     }
@@ -754,10 +766,12 @@ const detect_collision = (current_position_r, current_position_cube) => {
         if(!(
             current_position_r[i][2] >= current_position_cube[5][2]
         )){
-            arahZ *= -1.0
-            rotater *= -1.0
-            movementZR += (arahZ)
-            console.log('bottom')
+            if(arahZ < 0) {
+                arahZ *= -1.0
+                rotater *= -1.0
+                updateRPos()
+                console.log('bottom')
+            }
             return false
         }
     }
@@ -766,10 +780,12 @@ const detect_collision = (current_position_r, current_position_cube) => {
         if(!(
             current_position_r[i][0] <= current_position_cube[5][0]
         )){
-            arahX *= -1.0
-            rotater *= -1.0
-            movementZR += (arahX)
-            console.log('right')
+            if(arahX > 0){
+                arahX *= -1.0
+                rotater *= -1.0
+                updateRPos()
+                console.log('right')
+            }
             return false
         }
     }
@@ -778,10 +794,12 @@ const detect_collision = (current_position_r, current_position_cube) => {
         if(!(
             current_position_r[i][0] >= current_position_cube[4][0]
         )){
-            arahX *= -1.0
-            rotater *= -1.0
-            movementZR += (arahX)
-            console.log('left')
+            if(arahX < 0){
+                arahX *= -1.0
+                rotater *= -1.0
+                updateRPos()
+                console.log('left')
+            }
             return false
         }
     }
