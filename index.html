@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Tugas 1</title>
+    <title>Tugas 2</title>
     <meta http-equiv="content-type" content="text/html" charset="ISO-8859-1">
     
     <script type="text/javascript" src="gl-matrix-min.js"></script>
@@ -30,7 +30,36 @@
     </script>
     <script type="text/javascript" src="main.js"></script>
 </head>
-<body onload=WebGLStart()>
+<body>
     <canvas id='canvas-ku' style="border: none;" width="500" height="500"></canvas>
+    <p> Before play : (leave them for default), to change reload the page</p>
+    <p>Settings RHeight slider:</p><input type="range" min="1" max="10" id="height">
+    <p>Settings RWidth slider:</p> <input type="range" min="1" max="10" id="width">
+    <p>Settings RThick slider:</p> <input type="range" min="1" max="10" id="thick">
+    <button onclick=WebGLStart()>TRY IT</button>
+    <script>
+        let RHeightSlider = document.getElementById('height')
+        RHeightSlider.onchange = () => {
+            RHeight = RHeightSlider.value;
+        }
+        RHeightSlider.oninput = () => {
+            RHeight = RHeightSlider.value;
+            console.log(RHeightSlider)
+        }
+        let RWidthSlider = document.getElementById('width')
+        RWidthSlider.onchange = () => {
+            RWidth = RWidthSlider.value;
+        }
+        RWidthSlider.oninput = () => {
+            RWidth = RWidthSlider.value;
+        }
+        let RThickSlider = document.getElementById('thick')
+        RThickSlider.onchange = () => {
+            RThick = RThickSlider.value;
+        }
+        RThickSlider.oninput = () => {
+            RThick = RThickSlider.value;
+        }
+    </script>
 </body>
 </html>

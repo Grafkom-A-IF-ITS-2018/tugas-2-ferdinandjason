@@ -96,7 +96,9 @@ const setMatrixUniform = () => {
 }
 
 let RPositionBuffer
+let RVertexIndexBuffer
 let RColorBuffer
+let RColorBuffer2
 
 let CubePositionBuffer
 let CubeColorBuffer
@@ -105,270 +107,186 @@ let CubeVertexIndexBuffer
 let RVertices = []
 let CubeVertices = []
 
+let RHeight = 6.0
+let RWidth = 3.0
+let RThick = 1.0
+
 const initBuffers = () => {
     // R Position
     RPositionBuffer = gl.createBuffer()
     gl.bindBuffer(gl.ARRAY_BUFFER, RPositionBuffer)
     let vertices = [
-        // FRONT
-        0.0, 6.0, 1.0,
-        3.0, 6.0, 1.0,
-        0.0, 5.0, 1.0,
-        0.0, 5.0, 1.0,
-        3.0, 6.0, 1.0,
-        3.0, 5.0, 1.0,
+        // Front
+        0.0,    RHeight, RThick,
+        RWidth, RHeight, RThick,
+        0.0,    RHeight-(RHeight/6), RThick,
+        RWidth, RHeight-(RHeight/6), RThick,
 
-        3.0, 5.0, 1.0,
-        2.0, 5.0, 1.0,
-        3.0, 4.0, 1.0,
-        2.0, 4.0, 1.0,
-        2.0, 5.0, 1.0,
-        3.0, 4.0, 1.0,
+        RWidth-(RWidth/3.0),RHeight-(RHeight/6), RThick,
+        RWidth,             RHeight-(2*RHeight/6), RThick,
+        RWidth-(RWidth/3.0),RHeight-(2*RHeight/6), RThick,
 
-        0.0, 5.0, 1.0,
-        1.0, 5.0, 1.0,
-        0.0, 4.0, 1.0,
-        0.0, 4.0, 1.0,
-        1.0, 4.0, 1.0,
-        1.0, 5.0, 1.0,
+        RWidth-(2*RWidth/3.0),RHeight-(RHeight/6), RThick,
+        0.0,                RHeight-(2*RHeight/6), RThick,
+        RWidth-(2*RWidth/3.0),RHeight-(2*RHeight/6), RThick,
 
-        0.0, 4.0, 1.0,
-        3.0, 4.0, 1.0,
-        0.0, 3.0, 1.0,
-        0.0, 3.0, 1.0,
-        3.0, 4.0, 1.0,
-        3.0, 3.0, 1.0,
+        0.0,    RHeight-(3*RHeight/6), RThick,
+        RWidth, RHeight-(3*RHeight/6), RThick,
 
-        0.0, 3.0, 1.0,
-        1.0, 3.0, 1.0,
-        0.0, 0.0, 1.0,
-        0.0, 0.0, 1.0,
-        1.0, 3.0, 1.0,
-        1.0, 0.0, 1.0,
+        RWidth-(2*RWidth/3.0),RHeight-(3*RHeight/6),  RThick,
+        0.0,                0.0,                    RThick,
+        RWidth-(2*RWidth/3.0),0.0,                    RThick,
 
-        1.0, 3.0, 1.0,
-        2.0, 0.0, 1.0,
-        3.0, 0.0, 1.0,
-        3.0, 0.0, 1.0,
-        2.0, 3.0, 1.0,
-        1.0, 3.0, 1.0,
+        RWidth-(RWidth/3.0),0.0,                    RThick,
+        RWidth             ,0.0,                    RThick,
+        RWidth-(RWidth/3.0),RHeight-(3*RHeight/6),  RThick,
 
-        // BACK
-        0.0, 6.0, 0.0,
-        3.0, 6.0, 0.0,
-        0.0, 5.0, 0.0,
-        0.0, 5.0, 0.0,
-        3.0, 6.0, 0.0,
-        3.0, 5.0, 0.0,
+        // Back
+        0.0,    RHeight,                0.0, 
+        RWidth, RHeight,                0.0, 
+        0.0,    RHeight-(RHeight/6),  0.0, 
+        RWidth, RHeight-(RHeight/6),  0.0, 
 
-        3.0, 5.0, 0.0,
-        2.0, 5.0, 0.0,
-        3.0, 4.0, 0.0,
-        2.0, 4.0, 0.0,
-        2.0, 5.0, 0.0,
-        3.0, 4.0, 0.0,
+        RWidth-(RWidth/3.0),RHeight-(RHeight/6), 0.0, 
+        RWidth,             RHeight-(2*RHeight/6), 0.0, 
+        RWidth-(RWidth/3.0),RHeight-(2*RHeight/6), 0.0, 
 
-        0.0, 5.0, 0.0,
-        1.0, 5.0, 0.0,
-        0.0, 4.0, 0.0,
-        0.0, 4.0, 0.0,
-        1.0, 4.0, 0.0,
-        1.0, 5.0, 0.0,
+        RWidth-(2*RWidth/3.0), RHeight-(RHeight/6), 0.0, 
+        0.0,                 RHeight-(2*RHeight/6), 0.0, 
+        RWidth-(2*RWidth/3.0), RHeight-(2*RHeight/6), 0.0, 
 
-        0.0, 4.0, 0.0,
-        3.0, 4.0, 0.0,
-        0.0, 3.0, 0.0,
-        0.0, 3.0, 0.0,
-        3.0, 4.0, 0.0,
-        3.0, 3.0, 0.0,
+        0.0,    RHeight-(3*RHeight/6), 0.0, 
+        RWidth, RHeight-(3*RHeight/6), 0.0, 
 
-        0.0, 3.0, 0.0,
-        1.0, 3.0, 0.0,
-        0.0, 0.0, 0.0,
-        0.0, 0.0, 0.0,
-        1.0, 3.0, 0.0,
-        1.0, 0.0, 0.0,
+        RWidth-(2*RWidth/3.0),RHeight-(3*RHeight/6), 0.0, 
+        0.0,                0.0,                   0.0, 
+        RWidth-(2*RWidth/3.0),0.0,                   0.0, 
 
-        1.0, 3.0, 0.0,
-        2.0, 0.0, 0.0,
-        3.0, 0.0, 0.0,
-        3.0, 0.0, 0.0,
-        2.0, 3.0, 0.0,
-        1.0, 3.0, 0.0,
-
-        // SAMPING KANAN
-        3.0, 6.0, 1.0,
-        3.0, 6.0, 0.0,
-        3.0, 3.0, 0.0,
-        3.0, 3.0, 0.0,
-        3.0, 3.0, 1.0,
-        3.0, 6.0, 1.0,
-
-        3.0, 3.0, 1.0,
-        3.0, 3.0, 0.0,
-        2.0, 3.0, 0.0,
-        2.0, 3.0, 0.0,
-        2.0, 3.0, 1.0,
-        3.0, 3.0, 1.0,
-
-        2.0, 3.0, 1.0,
-        2.0, 3.0, 0.0,
-        3.0, 0.0, 0.0,
-        3.0, 0.0, 0.0,
-        3.0, 0.0, 1.0,
-        2.0, 3.0, 1.0,
-
-        // SAMPING KIRI
-        0.0, 6.0, 1.0,
-        0.0, 6.0, 0.0,
-        0.0, 0.0, 0.0,
-        0.0, 0.0, 0.0,
-        0.0, 0.0, 1.0,
-        0.0, 6.0, 1.0,
-
-        // BAWAH
-        0.0, 0.0, 1.0,
-        0.0, 0.0, 0.0,
-        1.0, 0.0, 1.0,
-        1.0, 0.0, 1.0,
-        1.0, 0.0, 0.0,
-        0.0, 0.0, 0.0,
-
-        2.0, 0.0, 1.0,
-        2.0, 0.0, 0.0,
-        3.0, 0.0, 1.0,
-        3.0, 0.0, 1.0,
-        3.0, 0.0, 0.0,
-        2.0, 0.0, 0.0,
-
-        // ATAS
-        0.0, 6.0, 1.0,
-        0.0, 6.0, 0.0,
-        3.0, 6.0, 1.0,
-        3.0, 6.0, 1.0,
-        3.0, 6.0, 0.0,
-        0.0, 6.0, 0.0,
-
-        // BOLONG
-        1.0, 0.0, 1.0,
-        1.0, 0.0, 0.0,
-        1.0, 3.0, 0.0,
-        1.0, 3.0, 0.0,
-        1.0, 3.0, 1.0,
-        1.0, 0.0, 1.0,
-
-        2.0, 0.0, 1.0,
-        2.0, 0.0, 0.0,
-        1.0, 3.0, 0.0,
-        1.0, 3.0, 0.0,
-        1.0, 3.0, 1.0,
-        2.0, 0.0, 1.0,
-        
-        // BOLONG KOTAK
-        1.0, 5.0, 1.0,
-        1.0, 5.0, 0.0,
-        1.0, 4.0, 1.0,
-        1.0, 4.0, 1.0,
-        1.0, 4.0, 0.0,
-        1.0, 5.0, 0.0,
-
-        2.0, 5.0, 1.0,
-        2.0, 5.0, 0.0,
-        2.0, 4.0, 1.0,
-        2.0, 4.0, 1.0,
-        2.0, 4.0, 0.0,
-        2.0, 5.0, 0.0,
-
-        1.0, 5.0, 1.0,
-        1.0, 5.0, 0.0,
-        2.0, 5.0, 1.0,
-        2.0, 5.0, 1.0,
-        2.0, 5.0, 0.0,
-        1.0, 5.0, 0.0,
-
-        1.0, 4.0, 1.0,
-        1.0, 4.0, 0.0,
-        2.0, 4.0, 1.0,
-        2.0, 4.0, 1.0,
-        2.0, 4.0, 0.0,
-        1.0, 4.0, 0.0,
+        RWidth-(RWidth/3.0),0.0, 0.0, 
+        RWidth,             0.0, 0.0, 
+        RWidth-(RWidth/3.0),RHeight-(3*RHeight/6), 0.0, 
     ]
     gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(vertices), gl.STATIC_DRAW)
     RPositionBuffer.itemSize = 3
     RPositionBuffer.numItems = vertices.length / 3
 
-    
-
-
-    // TO detech Collision
-    // Front
-    RVertices.push([0.0, 6.0, 1.0, 1.0]) // 1
-    RVertices.push([3.0, 6.0, 1.0, 1.0]) // 2
-    RVertices.push([0.0, 5.0, 1.0, 1.0]) // 3
-    RVertices.push([3.0, 5.0, 1.0, 1.0]) // 4
-    
-    RVertices.push([2.0, 5.0, 1.0, 1.0]) // 5
-    RVertices.push([3.0, 4.0, 1.0, 1.0]) // 6
-    RVertices.push([2.0, 4.0, 1.0, 1.0]) // 7
-
-    RVertices.push([1.0, 5.0, 1.0, 1.0]) // 8
-    RVertices.push([0.0, 4.0, 1.0, 1.0]) // 9
-    RVertices.push([1.0, 4.0, 1.0, 1.0]) // 10
-
-    RVertices.push([0.0, 3.0, 1.0, 1.0]) // 11
-    RVertices.push([3.0, 3.0, 1.0, 1.0]) // 12
-
-    RVertices.push([1.0, 3.0, 1.0, 1.0]) // 13
-    RVertices.push([0.0, 0.0, 1.0, 1.0]) // 14
-    RVertices.push([1.0, 0.0, 1.0, 1.0]) // 15
-
-    RVertices.push([2.0, 0.0, 1.0, 1.0]) // 16
-    RVertices.push([3.0, 0.0, 1.0, 1.0]) // 17
-    RVertices.push([2.0, 3.0, 1.0, 1.0]) // 18
-    // Back
-    RVertices.push([0.0, 6.0, 0.0, 1.0]) // 19
-    RVertices.push([3.0, 6.0, 0.0, 1.0]) // 20
-    RVertices.push([0.0, 5.0, 0.0, 1.0]) // 21
-    RVertices.push([3.0, 5.0, 0.0, 1.0]) // 22
-    
-    RVertices.push([2.0, 5.0, 0.0, 1.0]) // 23
-    RVertices.push([3.0, 4.0, 0.0, 1.0]) // 24
-    RVertices.push([2.0, 4.0, 0.0, 1.0]) // 25
-
-    RVertices.push([1.0, 5.0, 0.0, 1.0]) // 26
-    RVertices.push([0.0, 4.0, 0.0, 1.0]) // 27
-    RVertices.push([1.0, 4.0, 0.0, 1.0]) // 28
-
-    RVertices.push([0.0, 3.0, 0.0, 1.0]) // 29
-    RVertices.push([3.0, 3.0, 0.0, 1.0]) // 30
-
-    RVertices.push([1.0, 3.0, 0.0, 1.0]) // 31
-    RVertices.push([0.0, 0.0, 0.0, 1.0]) // 32
-    RVertices.push([1.0, 0.0, 0.0, 1.0]) // 33
-
-    RVertices.push([2.0, 0.0, 0.0, 1.0]) // 34
-    RVertices.push([3.0, 0.0, 0.0, 1.0]) // 35
-    RVertices.push([2.0, 3.0, 0.0, 1.0]) // 36
-
     // R Color
     RColorBuffer = gl.createBuffer()
     gl.bindBuffer(gl.ARRAY_BUFFER, RColorBuffer)
     colors = []
-    // FRONT, BACK
-    for (let i = 0; i < 6*12; i++) {
-        colors = colors.concat([0.5, 0.5, 1.0, 1.0])
+    for (let i = 0; i < 6*3; i++) {
+        colors = colors.concat([0.5, 0.5,1.0,1.0])
     }
-    // KANAN, KIRI
-    for (let i = 0; i < 6*4; i++) {
-        colors = colors.concat([0.5, 1.0, 0.5, 1.0])
-    }
-    // BAWAH, ATAS, LENGKAPIN BOLONG, BOLONG KOTAK
-    for (let i = 0; i < 6*9; i++) {
-        colors = colors.concat([1.0, 0.5, 0.5, 1.0])
+    for (let i = 0; i < 6*3; i++) {
+        colors = colors.concat([0.5,1.0,0.5, 1.0])
     }
     gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(colors), gl.STATIC_DRAW)
     RColorBuffer.itemSize = 4
     RColorBuffer.numItems = colors.length / 4
+
+    RVertexIndexBuffer = gl.createBuffer()
+    gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, RVertexIndexBuffer)    
+    let vertexIndices = [
+        // FRONT
+        0,1,2, 2,1,3,
+        3,4,5, 6,4,5,
+
+        2,7,8, 8,9,7,
+        8,5,10,  10,5,11,
+
+        10,12,13,  13,12,14,
+        12,15,16,  16,17,12,
+
+        // BACK
+        18,19,20,  20,19,21,
+        21,22,23,  24,22,23,
+
+        20,25,26,  26,27,25,
+        26,23,28,  28,23,29,
+
+        28,30,31,  31,30,32,
+        30,33,34,  34,35,30,
+
+        // SAMPING KANAN
+        1,19,29,  29,11,1,
+        11,29,35,  35,17,11,
+        17,35,34,  34,16,17,
+
+        // SAMPING KIRI
+        0,18,31,  31,13,0,
+
+        // BAWAH
+        13,31,14,  14,32,31,
+        15,33,16,  16,34,33,
+
+        // ATAS
+        0,18,1,  1,19,18,
+
+        // BOLONG
+        14,32,30,  30,12,14,
+        15,33,30,  30,12,15,
+
+        // BOLONG KOTAK
+        7,25,9,  9,27,25,
+        4,22,6,  6,24,22,
+
+        7,25,4,  4,22,25,
+        9,27,6,  6,24,27,
+    ]
+    gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, new Uint16Array(vertexIndices), gl.STATIC_DRAW)
+    RVertexIndexBuffer.itemSize = 1
+    RVertexIndexBuffer.numItems = vertexIndices.length;
+
+
+     // TO detech Collision
+    // Front
+    RVertices.push([0.0,    RHeight,               RThick,1.0]) // 1
+    RVertices.push([RWidth, RHeight,               RThick,1.0]) // 2
+    RVertices.push([0.0,    RHeight-(RHeight/6), RThick,1.0]) // 3
+    RVertices.push([RWidth, RHeight-(RHeight/6), RThick,1.0]) // 4
+    
+    RVertices.push([RWidth-(RWidth/3.0), RHeight-(RHeight/6), RThick,1.0]) // 5
+    RVertices.push([RWidth,              RHeight-(2*RHeight/6), RThick,1.0]) // 6
+    RVertices.push([RWidth-(RWidth/3.0), RHeight-(2*RHeight/6), RThick,1.0]) // 7
+
+    RVertices.push([RWidth-(2*RWidth/3.0), RHeight-(RHeight/6), RThick,1.0]) // 8
+    RVertices.push([0.0,                 RHeight-(2*RHeight/6), RThick,1.0]) // 9
+    RVertices.push([RWidth-(2*RWidth/3.0), RHeight-(2*RHeight/6), RThick,1.0]) // 10
+
+    RVertices.push([0.0,    RHeight-(3*RHeight/6), RThick,1.0]) // 11
+    RVertices.push([RWidth, RHeight-(3*RHeight/6), RThick,1.0]) // 12
+
+    RVertices.push([RWidth-(2*RWidth/3.0), RHeight-(3*RHeight/6), RThick,1.0]) // 13
+    RVertices.push([0.0,                 0.0, RThick,1.0]) // 14
+    RVertices.push([RWidth-(2*RWidth/3.0), 0.0, RThick,1.0]) // 15
+
+    RVertices.push([RWidth-(RWidth/3.0), 0.0, RThick,1.0]) // 16
+    RVertices.push([RWidth,              0.0, RThick,1.0]) // 17
+    RVertices.push([RWidth-(RWidth/3.0), RHeight-(3*RHeight/6), RThick,1.0]) // 18
+    // Back
+    RVertices.push([0.0,    RHeight,               0.0, 1.0]) // 19
+    RVertices.push([RWidth, 6.0,                   0.0, 1.0]) // 20
+    RVertices.push([0.0,    RHeight-(RHeight/6), 0.0, 1.0]) // 21
+    RVertices.push([RWidth, RHeight-(RHeight/6), 0.0, 1.0]) // 22
+    
+    RVertices.push([RWidth-(RWidth/3.0), RHeight-(RHeight/6), 0.0, 1.0]) // 23
+    RVertices.push([RWidth,              RHeight-(2*RHeight/6), 0.0, 1.0]) // 24
+    RVertices.push([RWidth-(RWidth/3.0), RHeight-(2*RHeight/6), 0.0, 1.0]) // 25
+
+    RVertices.push([RWidth-(2*RWidth/3.0), RHeight-(RHeight/6), 0.0, 1.0]) // 26
+    RVertices.push([0.0,                 RHeight-(2*RHeight/6), 0.0, 1.0]) // 27
+    RVertices.push([RWidth-(2*RWidth/3.0), RHeight-(2*RHeight/6), 0.0, 1.0]) // 28
+
+    RVertices.push([0.0,    RHeight-(3*RHeight/6), 0.0, 1.0]) // 29
+    RVertices.push([RWidth, RHeight-(3*RHeight/6), 0.0, 1.0]) // 30
+
+    RVertices.push([RWidth-(2*RWidth/3.0), RHeight-(3*RHeight/6), 0.0, 1.0]) // 31
+    RVertices.push([0.0,                 0.0, 0.0, 1.0]) // 32
+    RVertices.push([RWidth-(2*RWidth/3.0), 0.0, 0.0, 1.0]) // 33
+
+    RVertices.push([RWidth-(RWidth/3.0), 0.0, 0.0, 1.0]) // 34
+    RVertices.push([RWidth,              0.0, 0.0, 1.0]) // 35
+    RVertices.push([RWidth-(RWidth/3.0), RHeight-(3*RHeight/6), 0.0, 1.0]) // 36
 
     // Cube skeleton
     //      H             G
@@ -400,7 +318,7 @@ const initBuffers = () => {
     gl.bindBuffer(gl.ARRAY_BUFFER, CubeColorBuffer)
     colors = []
     for (let i = 0; i < vertices.length / 3; i++) {
-        colors = colors.concat([1.0, 1.0, 1.0, 1.0])        
+        colors = colors.concat([1.0,1.0,1.0,1.0])        
     }
     gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(colors), gl.STATIC_DRAW)
     CubeColorBuffer.itemSize = 4
@@ -415,7 +333,7 @@ const initBuffers = () => {
     ]
     gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, new Uint16Array(cubeVertexIndices), gl.STATIC_DRAW)
     CubeVertexIndexBuffer.itemSize = 1
-    CubeVertexIndexBuffer.numItems = 24
+    CubeVertexIndexBuffer.numItems = cubeVertexIndices.length
 
     CubeVertices.push([-12.0, -12.0,  12.0, 1.0])
     CubeVertices.push([ 12.0, -12.0,  12.0, 1.0])
@@ -446,67 +364,50 @@ const drawScene = () => {
 
     mat4.identity(mvMatrix)
 
-    mat4.translate(mvMatrix, mvMatrix, [-1.0, 5.0, -50.0])
+    mat4.translate(mvMatrix, mvMatrix, [-1.0, 5.0,-50.0])
 
     // mat4.rotate(mvMatrix, mvMatrix, glMatrix.toRadian(10), [0.0, 0.01, 0.0])
 
     mvPushMatrix()
     mat4.translate(mvMatrix, mvMatrix, [movementXR, movementYR, movementZR])
-    console.log(rotater*1.0)
     mat4.rotate(mvMatrix, mvMatrix, glMatrix.toRadian(rR), [0.0, rotater*1.0, 0.0])
-    mat4.translate(mvMatrix, mvMatrix, [-1.5, -3.0, -0.5])
-    //mvPushMatrix()
-    
-    //mvPopMatrix()
+    mat4.translate(mvMatrix, mvMatrix, [-RWidth/2.0, -RHeight/2.0, -RThick/2.0])
     
     gl.bindBuffer(gl.ARRAY_BUFFER, RPositionBuffer)
     gl.vertexAttribPointer(shaderProgram.vertexPositionAttribute, RPositionBuffer.itemSize, gl.FLOAT, false, 0, 0)
+    gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, RVertexIndexBuffer)
     gl.bindBuffer(gl.ARRAY_BUFFER, RColorBuffer)
     gl.vertexAttribPointer(shaderProgram.vertexColorAttribute, RColorBuffer.itemSize, gl.FLOAT, false, 0, 0)
 
     let current_position_r = []
     for(v = 0; v < RVertices.length; v++){
-        let temp = MulMat(mvMatrix,RVertices[v]);
+        let temp = matrix_multiplication(mvMatrix,RVertices[v]);
         current_position_r.push(temp);
     }
-    
-
     setMatrixUniform()
-
-    gl.drawArrays(gl.TRIANGLES, 0, RPositionBuffer.numItems)
-    
+    gl.drawElements(gl.TRIANGLES, RVertexIndexBuffer.numItems, gl.UNSIGNED_SHORT, 0)
     mvPopMatrix()
 
-
     mat4.translate(mvMatrix, mvMatrix, [1.5, -5.0, 0.0])
-
     mvPushMatrix()
-
-    //mat4.rotate(mvMatrix, mvMatrix, glMatrix.toRadian(rSquare), [0.0, 0.1, 0.0])
     mat4.translate(mvMatrix, mvMatrix, [-0.5, 0.0, -0.5])
     
     gl.bindBuffer(gl.ARRAY_BUFFER, CubePositionBuffer)
     gl.vertexAttribPointer(shaderProgram.vertexPositionAttribute, CubePositionBuffer.itemSize, gl.FLOAT, false, 0, 0)
-
     gl.bindBuffer(gl.ARRAY_BUFFER, CubeColorBuffer)
     gl.vertexAttribPointer(shaderProgram.vertexColorAttribute, CubeColorBuffer.itemSize, gl.FLOAT, false, 0, 0)
-
     gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, CubeVertexIndexBuffer)
 
     let current_position_cube = []
     for(v = 0; v < CubeVertices.length; v++){
-        let temp = MulMat(mvMatrix,CubeVertices[v]);
+        let temp = matrix_multiplication(mvMatrix,CubeVertices[v]);
         current_position_cube.push(temp);
     }
+    setMatrixUniform()
+    gl.drawElements(gl.LINES, CubeVertexIndexBuffer.numItems, gl.UNSIGNED_SHORT, 0)
+    mvPopMatrix()
 
     a = detect_collision(current_position_r, current_position_cube)
-    
-
-    setMatrixUniform()
-
-    gl.drawElements(gl.LINES, CubeVertexIndexBuffer.numItems, gl.UNSIGNED_SHORT, 0)
-    
-    mvPopMatrix()
 }
 
 let lastTime = 0
@@ -545,7 +446,7 @@ const WebGLStart = () => {
 }
 
 
-const MulMat = (a,b) => {
+const matrix_multiplication = (a,b) => {
     let c1,c2,c3,c4;
     c1 = a[0]*b[0] + a[4]*b[1] + a[8]*b[2] + a[12]*b[3]
     c2 = a[1]*b[0] + a[5]*b[1] + a[9]*b[2] + a[13]*b[3]
@@ -565,7 +466,6 @@ const detect_collision = (current_position_r, current_position_cube) => {
                 arahY *= -1.0
                 rotater *= -1.0
                 updateRPos()
-                console.log('front')
             }
             return false
         }
@@ -579,7 +479,6 @@ const detect_collision = (current_position_r, current_position_cube) => {
                 arahY *= -1.0
                 rotater *= -1.0
                 updateRPos()
-                console.log('back')
             }
             return false
         }
@@ -593,7 +492,6 @@ const detect_collision = (current_position_r, current_position_cube) => {
                 arahZ *= -1.0
                 rotater *= -1.0
                 updateRPos()
-                console.log('top')
             }
             return false
         }
@@ -607,7 +505,6 @@ const detect_collision = (current_position_r, current_position_cube) => {
                 arahZ *= -1.0
                 rotater *= -1.0
                 updateRPos()
-                console.log('bottom')
             }
             return false
         }
@@ -621,7 +518,6 @@ const detect_collision = (current_position_r, current_position_cube) => {
                 arahX *= -1.0
                 rotater *= -1.0
                 updateRPos()
-                console.log('right')
             }
             return false
         }
@@ -635,7 +531,6 @@ const detect_collision = (current_position_r, current_position_cube) => {
                 arahX *= -1.0
                 rotater *= -1.0
                 updateRPos()
-                console.log('left')
             }
             return false
         }
