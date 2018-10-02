@@ -99,6 +99,8 @@ let RPositionBuffer
 let RColorBuffer
 
 let CubePositionBuffer
+let CubeColorBuffer
+let CubeVertexIndexBuffer
 
 let RVertices = []
 let CubeVertices = []
@@ -295,298 +297,125 @@ const initBuffers = () => {
     RPositionBuffer.itemSize = 3
     RPositionBuffer.numItems = vertices.length / 3
 
+    
+
+
     // TO detech Collision
     // Front
-    RVertices.push([0.0, 6.0, 1.0, 1.0])
-    RVertices.push([3.0, 6.0, 1.0, 1.0])
-    RVertices.push([0.0, 5.0, 1.0, 1.0])
-    RVertices.push([3.0, 5.0, 1.0, 1.0])
+    RVertices.push([0.0, 6.0, 1.0, 1.0]) // 1
+    RVertices.push([3.0, 6.0, 1.0, 1.0]) // 2
+    RVertices.push([0.0, 5.0, 1.0, 1.0]) // 3
+    RVertices.push([3.0, 5.0, 1.0, 1.0]) // 4
     
-    RVertices.push([2.0, 5.0, 1.0, 1.0])
-    RVertices.push([3.0, 4.0, 1.0, 1.0])
-    RVertices.push([2.0, 4.0, 1.0, 1.0])
+    RVertices.push([2.0, 5.0, 1.0, 1.0]) // 5
+    RVertices.push([3.0, 4.0, 1.0, 1.0]) // 6
+    RVertices.push([2.0, 4.0, 1.0, 1.0]) // 7
 
-    RVertices.push([1.0, 5.0, 1.0, 1.0])
-    RVertices.push([0.0, 4.0, 1.0, 1.0])
-    RVertices.push([1.0, 4.0, 1.0, 1.0])
+    RVertices.push([1.0, 5.0, 1.0, 1.0]) // 8
+    RVertices.push([0.0, 4.0, 1.0, 1.0]) // 9
+    RVertices.push([1.0, 4.0, 1.0, 1.0]) // 10
 
-    RVertices.push([3.0, 4.0, 1.0, 1.0])
-    RVertices.push([0.0, 3.0, 1.0, 1.0])
-    RVertices.push([3.0, 3.0, 1.0, 1.0])
+    RVertices.push([0.0, 3.0, 1.0, 1.0]) // 11
+    RVertices.push([3.0, 3.0, 1.0, 1.0]) // 12
 
-    RVertices.push([1.0, 3.0, 1.0, 1.0])
-    RVertices.push([0.0, 0.0, 1.0, 1.0])
-    RVertices.push([1.0, 0.0, 1.0, 1.0])
+    RVertices.push([1.0, 3.0, 1.0, 1.0]) // 13
+    RVertices.push([0.0, 0.0, 1.0, 1.0]) // 14
+    RVertices.push([1.0, 0.0, 1.0, 1.0]) // 15
 
-    RVertices.push([2.0, 0.0, 1.0, 1.0])
-    RVertices.push([3.0, 0.0, 1.0, 1.0])
-    RVertices.push([2.0, 3.0, 1.0, 1.0])
+    RVertices.push([2.0, 0.0, 1.0, 1.0]) // 16
+    RVertices.push([3.0, 0.0, 1.0, 1.0]) // 17
+    RVertices.push([2.0, 3.0, 1.0, 1.0]) // 18
     // Back
-    RVertices.push([0.0, 6.0, 0.0, 1.0])
-    RVertices.push([3.0, 6.0, 0.0, 1.0])
-    RVertices.push([0.0, 5.0, 0.0, 1.0])
-    RVertices.push([3.0, 5.0, 0.0, 1.0])
+    RVertices.push([0.0, 6.0, 0.0, 1.0]) // 19
+    RVertices.push([3.0, 6.0, 0.0, 1.0]) // 20
+    RVertices.push([0.0, 5.0, 0.0, 1.0]) // 21
+    RVertices.push([3.0, 5.0, 0.0, 1.0]) // 22
     
-    RVertices.push([2.0, 5.0, 0.0, 1.0])
-    RVertices.push([3.0, 4.0, 0.0, 1.0])
-    RVertices.push([2.0, 4.0, 0.0, 1.0])
+    RVertices.push([2.0, 5.0, 0.0, 1.0]) // 23
+    RVertices.push([3.0, 4.0, 0.0, 1.0]) // 24
+    RVertices.push([2.0, 4.0, 0.0, 1.0]) // 25
 
-    RVertices.push([1.0, 5.0, 0.0, 1.0])
-    RVertices.push([0.0, 4.0, 0.0, 1.0])
-    RVertices.push([1.0, 4.0, 0.0, 1.0])
+    RVertices.push([1.0, 5.0, 0.0, 1.0]) // 26
+    RVertices.push([0.0, 4.0, 0.0, 1.0]) // 27
+    RVertices.push([1.0, 4.0, 0.0, 1.0]) // 28
 
-    RVertices.push([3.0, 4.0, 0.0, 1.0])
-    RVertices.push([0.0, 3.0, 0.0, 1.0])
-    RVertices.push([3.0, 3.0, 0.0, 1.0])
+    RVertices.push([0.0, 3.0, 0.0, 1.0]) // 29
+    RVertices.push([3.0, 3.0, 0.0, 1.0]) // 30
 
-    RVertices.push([1.0, 3.0, 0.0, 1.0])
-    RVertices.push([0.0, 0.0, 0.0, 1.0])
-    RVertices.push([1.0, 0.0, 0.0, 1.0])
+    RVertices.push([1.0, 3.0, 0.0, 1.0]) // 31
+    RVertices.push([0.0, 0.0, 0.0, 1.0]) // 32
+    RVertices.push([1.0, 0.0, 0.0, 1.0]) // 33
 
-    RVertices.push([2.0, 0.0, 0.0, 1.0])
-    RVertices.push([3.0, 0.0, 0.0, 1.0])
-    RVertices.push([2.0, 3.0, 0.0, 1.0])
+    RVertices.push([2.0, 0.0, 0.0, 1.0]) // 34
+    RVertices.push([3.0, 0.0, 0.0, 1.0]) // 35
+    RVertices.push([2.0, 3.0, 0.0, 1.0]) // 36
 
     // R Color
     RColorBuffer = gl.createBuffer()
     gl.bindBuffer(gl.ARRAY_BUFFER, RColorBuffer)
-    vertices = [
-        // FRONT
-        0.5, 0.5, 1.0, 1.0,
-        0.5, 0.5, 1.0, 1.0,
-        0.5, 0.5, 1.0, 1.0,
-        0.5, 0.5, 1.0, 1.0,
-        0.5, 0.5, 1.0, 1.0,
-        0.5, 0.5, 1.0, 1.0,
-
-        0.5, 0.5, 1.0, 1.0,
-        0.5, 0.5, 1.0, 1.0,
-        0.5, 0.5, 1.0, 1.0,
-        0.5, 0.5, 1.0, 1.0,
-        0.5, 0.5, 1.0, 1.0,
-        0.5, 0.5, 1.0, 1.0,
-
-        0.5, 0.5, 1.0, 1.0,
-        0.5, 0.5, 1.0, 1.0,
-        0.5, 0.5, 1.0, 1.0,
-        0.5, 0.5, 1.0, 1.0,
-        0.5, 0.5, 1.0, 1.0,
-        0.5, 0.5, 1.0, 1.0,
-
-        0.5, 0.5, 1.0, 1.0,
-        0.5, 0.5, 1.0, 1.0,
-        0.5, 0.5, 1.0, 1.0,
-        0.5, 0.5, 1.0, 1.0,
-        0.5, 0.5, 1.0, 1.0,
-        0.5, 0.5, 1.0, 1.0,
-
-        0.5, 0.5, 1.0, 1.0,
-        0.5, 0.5, 1.0, 1.0,
-        0.5, 0.5, 1.0, 1.0,
-        0.5, 0.5, 1.0, 1.0,
-        0.5, 0.5, 1.0, 1.0,
-        0.5, 0.5, 1.0, 1.0,
-
-        0.5, 0.5, 1.0, 1.0,
-        0.5, 0.5, 1.0, 1.0,
-        0.5, 0.5, 1.0, 1.0,
-        0.5, 0.5, 1.0, 1.0,
-        0.5, 0.5, 1.0, 1.0,
-        0.5, 0.5, 1.0, 1.0,
-
-        //BACK
-        0.5, 0.5, 1.0, 1.0,
-        0.5, 0.5, 1.0, 1.0,
-        0.5, 0.5, 1.0, 1.0,
-        0.5, 0.5, 1.0, 1.0,
-        0.5, 0.5, 1.0, 1.0,
-        0.5, 0.5, 1.0, 1.0,
-
-        0.5, 0.5, 1.0, 1.0,
-        0.5, 0.5, 1.0, 1.0,
-        0.5, 0.5, 1.0, 1.0,
-        0.5, 0.5, 1.0, 1.0,
-        0.5, 0.5, 1.0, 1.0,
-        0.5, 0.5, 1.0, 1.0,
-
-        0.5, 0.5, 1.0, 1.0,
-        0.5, 0.5, 1.0, 1.0,
-        0.5, 0.5, 1.0, 1.0,
-        0.5, 0.5, 1.0, 1.0,
-        0.5, 0.5, 1.0, 1.0,
-        0.5, 0.5, 1.0, 1.0,
-
-        0.5, 0.5, 1.0, 1.0,
-        0.5, 0.5, 1.0, 1.0,
-        0.5, 0.5, 1.0, 1.0,
-        0.5, 0.5, 1.0, 1.0,
-        0.5, 0.5, 1.0, 1.0,
-        0.5, 0.5, 1.0, 1.0,
-
-        0.5, 0.5, 1.0, 1.0,
-        0.5, 0.5, 1.0, 1.0,
-        0.5, 0.5, 1.0, 1.0,
-        0.5, 0.5, 1.0, 1.0,
-        0.5, 0.5, 1.0, 1.0,
-        0.5, 0.5, 1.0, 1.0,
-
-        0.5, 0.5, 1.0, 1.0,
-        0.5, 0.5, 1.0, 1.0,
-        0.5, 0.5, 1.0, 1.0,
-        0.5, 0.5, 1.0, 1.0,
-        0.5, 0.5, 1.0, 1.0,
-        0.5, 0.5, 1.0, 1.0,
-
-        // KANAN
-        0.5, 1.0, 0.5, 1.0,
-        0.5, 1.0, 0.5, 1.0,
-        0.5, 1.0, 0.5, 1.0,
-        0.5, 1.0, 0.5, 1.0,
-        0.5, 1.0, 0.5, 1.0,
-        0.5, 1.0, 0.5, 1.0,
-
-        0.5, 1.0, 0.5, 1.0,
-        0.5, 1.0, 0.5, 1.0,
-        0.5, 1.0, 0.5, 1.0,
-        0.5, 1.0, 0.5, 1.0,
-        0.5, 1.0, 0.5, 1.0,
-        0.5, 1.0, 0.5, 1.0,
-
-        0.5, 1.0, 0.5, 1.0,
-        0.5, 1.0, 0.5, 1.0,
-        0.5, 1.0, 0.5, 1.0,
-        0.5, 1.0, 0.5, 1.0,
-        0.5, 1.0, 0.5, 1.0,
-        0.5, 1.0, 0.5, 1.0,
-
-        // KIRI
-        0.5, 1.0, 0.5, 1.0,
-        0.5, 1.0, 0.5, 1.0,
-        0.5, 1.0, 0.5, 1.0,
-        0.5, 1.0, 0.5, 1.0,
-        0.5, 1.0, 0.5, 1.0,
-        0.5, 1.0, 0.5, 1.0,
-
-        // BAWAH
-        1.0, 0.5, 0.5, 1.0,
-        1.0, 0.5, 0.5, 1.0,
-        1.0, 0.5, 0.5, 1.0,
-        1.0, 0.5, 0.5, 1.0,
-        1.0, 0.5, 0.5, 1.0,
-        1.0, 0.5, 0.5, 1.0,
-
-        1.0, 0.5, 0.5, 1.0,
-        1.0, 0.5, 0.5, 1.0,
-        1.0, 0.5, 0.5, 1.0,
-        1.0, 0.5, 0.5, 1.0,
-        1.0, 0.5, 0.5, 1.0,
-        1.0, 0.5, 0.5, 1.0,
-
-        // ATAS
-        1.0, 0.5, 0.5, 1.0,
-        1.0, 0.5, 0.5, 1.0,
-        1.0, 0.5, 0.5, 1.0,
-        1.0, 0.5, 0.5, 1.0,
-        1.0, 0.5, 0.5, 1.0,
-        1.0, 0.5, 0.5, 1.0,
-
-        // LENGKAPIN BOLONG
-        1.0, 0.5, 0.5, 1.0,
-        1.0, 0.5, 0.5, 1.0,
-        1.0, 0.5, 0.5, 1.0,
-        1.0, 0.5, 0.5, 1.0,
-        1.0, 0.5, 0.5, 1.0,
-        1.0, 0.5, 0.5, 1.0,
-
-        1.0, 0.5, 0.5, 1.0,
-        1.0, 0.5, 0.5, 1.0,
-        1.0, 0.5, 0.5, 1.0,
-        1.0, 0.5, 0.5, 1.0,
-        1.0, 0.5, 0.5, 1.0,
-        1.0, 0.5, 0.5, 1.0,
-
-        // BOLONG KOTAK
-        1.0, 0.5, 0.5, 1.0,
-        1.0, 0.5, 0.5, 1.0,
-        1.0, 0.5, 0.5, 1.0,
-        1.0, 0.5, 0.5, 1.0,
-        1.0, 0.5, 0.5, 1.0,
-        1.0, 0.5, 0.5, 1.0,
-
-        1.0, 0.5, 0.5, 1.0,
-        1.0, 0.5, 0.5, 1.0,
-        1.0, 0.5, 0.5, 1.0,
-        1.0, 0.5, 0.5, 1.0,
-        1.0, 0.5, 0.5, 1.0,
-        1.0, 0.5, 0.5, 1.0,
-
-        1.0, 0.5, 0.5, 1.0,
-        1.0, 0.5, 0.5, 1.0,
-        1.0, 0.5, 0.5, 1.0,
-        1.0, 0.5, 0.5, 1.0,
-        1.0, 0.5, 0.5, 1.0,
-        1.0, 0.5, 0.5, 1.0,
-
-        1.0, 0.5, 0.5, 1.0,
-        1.0, 0.5, 0.5, 1.0,
-        1.0, 0.5, 0.5, 1.0,
-        1.0, 0.5, 0.5, 1.0,
-        1.0, 0.5, 0.5, 1.0,
-        1.0, 0.5, 0.5, 1.0,
-
-
-    ]
-    gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(vertices), gl.STATIC_DRAW)
+    colors = []
+    // FRONT, BACK
+    for (let i = 0; i < 6*12; i++) {
+        colors = colors.concat([0.5, 0.5, 1.0, 1.0])
+    }
+    // KANAN, KIRI
+    for (let i = 0; i < 6*4; i++) {
+        colors = colors.concat([0.5, 1.0, 0.5, 1.0])
+    }
+    // BAWAH, ATAS, LENGKAPIN BOLONG, BOLONG KOTAK
+    for (let i = 0; i < 6*9; i++) {
+        colors = colors.concat([1.0, 0.5, 0.5, 1.0])
+    }
+    gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(colors), gl.STATIC_DRAW)
     RColorBuffer.itemSize = 4
-    RColorBuffer.numItems = vertices.length / 4
+    RColorBuffer.numItems = colors.length / 4
 
-
-
-
-
+    // Cube skeleton
+    //      H             G
+    // E            F
+    // 
+    //
+    // 
+    //      D             C
+    // A            B
 
     CubePositionBuffer = gl.createBuffer()
     gl.bindBuffer(gl.ARRAY_BUFFER, CubePositionBuffer)
     vertices = [
-        // Front face
-        -12.0, -12.0,  12.0,
-        12.0, -12.0,  12.0,
-        12.0,  12.0,  12.0,
-        -12.0,  12.0,  12.0,
-
-        // Back face
-        -12.0, -12.0, -12.0,
-        -12.0,  12.0, -12.0,
-        12.0,  12.0, -12.0,
-        12.0, -12.0, -12.0,
-
-        // Top face
-        -12.0,  12.0, -12.0,
-        -12.0,  12.0,  12.0,
-        12.0,  12.0,  12.0,
-        12.0,  12.0, -12.0,
-
-        // Bottom face
-        -12.0, -12.0, -12.0,
-        12.0, -12.0, -12.0,
-        12.0, -12.0,  12.0,
-        -12.0, -12.0,  12.0,
-
-        // Right face
-        12.0, -12.0, -12.0,
-        12.0,  12.0, -12.0,
-        12.0,  12.0,  12.0,
-        12.0, -12.0,  12.0,
-
-        // Left face
-        -12.0, -12.0, -12.0,
-        -12.0, -12.0,  12.0,
-        -12.0,  12.0,  12.0,
-        -12.0,  12.0, -12.0,
+        -12.0, -12.0,  12.0, // A 0
+         12.0, -12.0,  12.0, // B 1
+         12.0, -12.0, -12.0, // C 2
+        -12.0, -12.0, -12.0, // D 3
+        -12.0,  12.0,  12.0, // E 4
+         12.0,  12.0,  12.0, // F 5
+         12.0,  12.0, -12.0, // G 6
+        -12.0,  12.0, -12.0, // H 7
     ]
     gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(vertices), gl.STATIC_DRAW)
     CubePositionBuffer.itemSize = 3
     CubePositionBuffer.numItems = vertices.length / 3
+
+    CubeColorBuffer = gl.createBuffer()
+
+    gl.bindBuffer(gl.ARRAY_BUFFER, CubeColorBuffer)
+    colors = []
+    for (let i = 0; i < vertices.length / 3; i++) {
+        colors = colors.concat([1.0, 1.0, 1.0, 1.0])        
+    }
+    gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(colors), gl.STATIC_DRAW)
+    CubeColorBuffer.itemSize = 4
+    CubeColorBuffer.numItems = colors.length / 3
+
+    CubeVertexIndexBuffer = gl.createBuffer()
+    gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, CubeVertexIndexBuffer)    
+    let cubeVertexIndices = [
+       0, 1,    1, 2,   2, 3,   3, 0, // AB, BC, CD, DA 
+       4, 5,    5, 6,   6, 7,   4, 7, // EF, FG, GH, EH
+       1, 5,    0, 4,   2, 6,   3, 7, // BF, AE, CG, DH
+    ]
+    gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, new Uint16Array(cubeVertexIndices), gl.STATIC_DRAW)
+    CubeVertexIndexBuffer.itemSize = 1
+    CubeVertexIndexBuffer.numItems = 24
 
     CubeVertices.push([-12.0, -12.0,  12.0, 1.0])
     CubeVertices.push([ 12.0, -12.0,  12.0, 1.0])
@@ -616,13 +445,16 @@ const drawScene = () => {
     mat4.perspective(pMatrix, glMatrix.toRadian(45), gl.viewportWidth/gl.viewportHeight, 0.1, 100.0)
 
     mat4.identity(mvMatrix)
+
     mat4.translate(mvMatrix, mvMatrix, [-1.0, 5.0, -50.0])
+
+    // mat4.rotate(mvMatrix, mvMatrix, glMatrix.toRadian(10), [0.0, 0.01, 0.0])
 
     mvPushMatrix()
     mat4.translate(mvMatrix, mvMatrix, [movementXR, movementYR, movementZR])
     console.log(rotater*1.0)
     mat4.rotate(mvMatrix, mvMatrix, glMatrix.toRadian(rR), [0.0, rotater*1.0, 0.0])
-    mat4.translate(mvMatrix, mvMatrix, [-1.0, -3.0, -0.5])
+    mat4.translate(mvMatrix, mvMatrix, [-1.5, -3.0, -0.5])
     //mvPushMatrix()
     
     //mvPopMatrix()
@@ -656,6 +488,11 @@ const drawScene = () => {
     gl.bindBuffer(gl.ARRAY_BUFFER, CubePositionBuffer)
     gl.vertexAttribPointer(shaderProgram.vertexPositionAttribute, CubePositionBuffer.itemSize, gl.FLOAT, false, 0, 0)
 
+    gl.bindBuffer(gl.ARRAY_BUFFER, CubeColorBuffer)
+    gl.vertexAttribPointer(shaderProgram.vertexColorAttribute, CubeColorBuffer.itemSize, gl.FLOAT, false, 0, 0)
+
+    gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, CubeVertexIndexBuffer)
+
     let current_position_cube = []
     for(v = 0; v < CubeVertices.length; v++){
         let temp = MulMat(mvMatrix,CubeVertices[v]);
@@ -667,7 +504,7 @@ const drawScene = () => {
 
     setMatrixUniform()
 
-    gl.drawArrays(gl.LINE_LOOP, 0, CubePositionBuffer.numItems)
+    gl.drawElements(gl.LINES, CubeVertexIndexBuffer.numItems, gl.UNSIGNED_SHORT, 0)
     
     mvPopMatrix()
 }
