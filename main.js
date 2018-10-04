@@ -367,8 +367,17 @@ const distance_point_to_plane = (plane_equation, point) => {
     return num/denum
 }
 
+let THRESHOLD = 0.05
+
 let rR = 0
-let rSquare = 0
+let rXSquare = 0
+let rYSquare = 0
+
+let xSSpeed = 0
+let ySSpeed = 0
+
+let z = 0
+
 let movementXR = 0.01
 let movementYR = 0.01
 let movementZR = 0.01
@@ -377,6 +386,43 @@ let arahX = 1.0;
 let arahY = 1.0;
 let arahZ = 1.0;
 let rotater = 1.0;
+
+let RScaler = 1.0;
+
+var currentPressedKeys = {}
+
+function handleKeyDown(event) { console.log(event.keyCode); currentPressedKeys[event.keyCode] = true }
+
+function handleKeyUp(event) { currentPressedKeys[event.keyCode] = false }
+
+function handleKeys() {
+    if (currentPressedKeys[90]) { // Z
+        RScaler += 0.01;
+        if(RScaler > 3.0) RScaler = 3.0
+    }
+    if (currentPressedKeys[88]) { // X
+        RScaler -= 0.01;
+        if(RScaler < 0.1) RScaler = 0.1
+    }
+    if (currentPressedKeys[87]) { // W
+        z -= 0.05
+    }
+    if (currentPressedKeys[83]) { // S
+        z += 0.05
+    }
+    if (currentPressedKeys[37]) { // Kiri
+        ySSpeed -= 1
+    }
+    if (currentPressedKeys[39]) { // Kanan
+        ySSpeed += 1
+    }
+    if (currentPressedKeys[38]) { // Atas
+        xSSpeed -= 1
+    }
+    if (currentPressedKeys[40]) { // Bawah
+        xSSpeed += 1
+    }
+}
 
 let KUBUS = {
     TOP : null,
@@ -395,13 +441,15 @@ const drawScene = () => {
 
     mat4.identity(mvMatrix)
 
-    mat4.translate(mvMatrix, mvMatrix, [-1.0, 5.0,-50.0])
+    mat4.translate(mvMatrix, mvMatrix, [0.0, 0.0,-50.0 + z])
 
-    mat4.rotate(mvMatrix, mvMatrix, glMatrix.toRadian(rSquare), [0.0, 0.01, 0.0])
+    mat4.rotate(mvMatrix, mvMatrix, glMatrix.toRadian(rYSquare), [0.0, 0.01, 0.0])
+    mat4.rotate(mvMatrix, mvMatrix, glMatrix.toRadian(rXSquare), [0.01, 0.0, 0.0])
 
     mvPushMatrix()
     mat4.translate(mvMatrix, mvMatrix, [movementXR, movementYR, movementZR])
     mat4.rotate(mvMatrix, mvMatrix, glMatrix.toRadian(rR), [0.0, 1.0, 0.0])
+    mat4.scale(mvMatrix, mvMatrix, [RScaler,RScaler,RScaler])
     mat4.translate(mvMatrix, mvMatrix, [-RWidth/2.0, -RHeight/2.0, -RThick/2.0])
     
     gl.bindBuffer(gl.ARRAY_BUFFER, RPositionBuffer)
@@ -419,7 +467,7 @@ const drawScene = () => {
     gl.drawElements(gl.TRIANGLES, RVertexIndexBuffer.numItems, gl.UNSIGNED_SHORT, 0)
     mvPopMatrix()
 
-    mat4.translate(mvMatrix, mvMatrix, [1.5, -5.0, 0.0])
+    
     mvPushMatrix()
     //mat4.translate(mvMatrix, mvMatrix, [-0.5, 0.0, -0.5])
     
@@ -472,7 +520,8 @@ const animate = () => {
     if(lastTime != 0){
         let elapsed = timeNow - lastTime
         rR += (rotater)*(100 * elapsed) / 1000.0
-        rSquare += (10 * elapsed) / 1000.0
+        rYSquare += (ySSpeed * elapsed) / 1000.0
+        rXSquare += (xSSpeed * elapsed) / 1000.0
         updateRPos()
     }
     lastTime = timeNow
@@ -480,6 +529,7 @@ const animate = () => {
 
 const tick = () => {
     requestAnimationFrame(tick)
+    handleKeys()
     drawScene()
     animate()
 }
@@ -491,6 +541,10 @@ const WebGLStart = () => {
     initBuffers()
     gl.clearColor(0.0, 0.0, 0.0, 1.0)
     gl.enable(gl.DEPTH_TEST)
+
+    document.onkeydown = handleKeyDown
+	document.onkeyup = handleKeyUp
+
     tick()
 }
 
@@ -512,7 +566,7 @@ const detect_collision = (current_position_r, KUBUS, current_position_cube) => {
         // console.log(current_position_cube)
         // console.log(KUBUS.TOP)
         if(
-            distance_point_to_plane(KUBUS.TOP, current_position_r[i]) < 0.1
+            distance_point_to_plane(KUBUS.TOP, current_position_r[i]) < THRESHOLD
         ){
             if(arahY > 0){
                 arahY *= -1.0
@@ -525,7 +579,7 @@ const detect_collision = (current_position_r, KUBUS, current_position_cube) => {
     // BOTTOM
     for(i = 0; i < current_position_r.length; i++){
         if(
-            distance_point_to_plane(KUBUS.BOTTOM, current_position_r[i]) < 0.1
+            distance_point_to_plane(KUBUS.BOTTOM, current_position_r[i]) < THRESHOLD
         ){
             if(arahY < 0){
                 arahY *= -1.0
@@ -538,7 +592,7 @@ const detect_collision = (current_position_r, KUBUS, current_position_cube) => {
     // FRONT
     for(i = 0; i < current_position_r.length; i++){
         if(
-            distance_point_to_plane(KUBUS.FRONT, current_position_r[i]) < 0.1
+            distance_point_to_plane(KUBUS.FRONT, current_position_r[i]) < THRESHOLD
         ){
             if(arahZ > 0) {
                 arahZ *= -1.0
@@ -551,7 +605,7 @@ const detect_collision = (current_position_r, KUBUS, current_position_cube) => {
     // BACK
     for(i = 0; i < current_position_r.length; i++){
         if(
-            distance_point_to_plane(KUBUS.BACK, current_position_r[i]) < 0.1
+            distance_point_to_plane(KUBUS.BACK, current_position_r[i]) < THRESHOLD
         ){
             if(arahZ < 0) {
                 arahZ *= -1.0
@@ -564,7 +618,7 @@ const detect_collision = (current_position_r, KUBUS, current_position_cube) => {
     // Right
     for(i = 0; i < current_position_r.length; i++){
         if(
-            distance_point_to_plane(KUBUS.RIGHT, current_position_r[i]) < 0.1
+            distance_point_to_plane(KUBUS.RIGHT, current_position_r[i]) < THRESHOLD
         ){
             if(arahX > 0){
                 arahX *= -1.0
@@ -577,7 +631,7 @@ const detect_collision = (current_position_r, KUBUS, current_position_cube) => {
     // Left
     for(i = 0; i < current_position_r.length; i++){
         if(
-            distance_point_to_plane(KUBUS.LEFT, current_position_r[i]) < 0.1
+            distance_point_to_plane(KUBUS.LEFT, current_position_r[i]) < THRESHOLD
         ){
             if(arahX < 0){
                 arahX *= -1.0

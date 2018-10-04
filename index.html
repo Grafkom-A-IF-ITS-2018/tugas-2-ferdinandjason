@@ -31,6 +31,29 @@
     <script type="text/javascript" src="main.js"></script>
 </head>
 <body onload=WebGLStart()>
-    <canvas id='canvas-ku' style="border: none;" width="500" height="500"></canvas>
+    <div style="text-align: center">
+        <div style="display: flex">
+            <div style="width: calc(50% - 265px);margin-top: auto;margin-bottom: auto">
+                <h3>Arrow Interaction : </h3>
+                <ul>
+                    <li>Up/Down Arrow : Rotasikan kubus pada sumbu X </li>
+                    <li>Left/Right Arrow : Rotasikan kubus pada sumbu Y </li>
+                    <li>Semakin lama Anda menahan tombol arah, semakin cepat kubus berputar)</li>
+                </ul>
+            </div>
+            <div>
+                <h2>Grafika Komputer - Tugas 2</h2>
+                <canvas id='canvas-ku' style="border: none;" width="500" height="500"></canvas>
+            </div>
+            <div style="width: calc(50% - 265px);margin-top: auto;margin-bottom: auto">
+                    <h3>Keyboard Interaction : </h3>
+                    <ul>
+                        <li>W/S Key : Zoom in dan Zoom out kubus </li>
+                        <li>Z/X Key : Perbesar/Perkecil Huruf R </li>
+                        <li>Minimum perkecil huruf adalah 0.1X dan maksimum perbesar adalah 3.0X</li>
+                    </ul>
+                </div>
+        </div>
+    </div>
 </body>
 </html>
