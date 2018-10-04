@@ -335,14 +335,36 @@ const initBuffers = () => {
     CubeVertexIndexBuffer.itemSize = 1
     CubeVertexIndexBuffer.numItems = cubeVertexIndices.length
 
-    CubeVertices.push([-12.0, -12.0,  12.0, 1.0])
-    CubeVertices.push([ 12.0, -12.0,  12.0, 1.0])
-    CubeVertices.push([ 12.0,  12.0,  12.0, 1.0])
-    CubeVertices.push([-12.0,  12.0,  12.0, 1.0])
-    CubeVertices.push([-12.0, -12.0, -12.0, 1.0])
-    CubeVertices.push([ 12.0, -12.0, -12.0, 1.0])
-    CubeVertices.push([ 12.0,  12.0, -12.0, 1.0])
-    CubeVertices.push([-12.0,  12.0, -12.0, 1.0])
+    CubeVertices.push([-12.0, -12.0,  12.0, 1.0]) // A 0
+    CubeVertices.push([ 12.0, -12.0,  12.0, 1.0]) // B 1
+    CubeVertices.push([ 12.0,  12.0,  12.0, 1.0]) // F 5
+    CubeVertices.push([-12.0,  12.0,  12.0, 1.0]) // E 4
+    CubeVertices.push([-12.0, -12.0, -12.0, 1.0]) // D 3
+    CubeVertices.push([ 12.0, -12.0, -12.0, 1.0]) // C 2
+    CubeVertices.push([ 12.0,  12.0, -12.0, 1.0]) // G 6
+    CubeVertices.push([-12.0,  12.0, -12.0, 1.0]) // H 7
+}
+
+const plane_from_point = (A ,B, C) => {
+    let n = [], temp = [], temp2 = []
+    temp = vec3.subtract(temp,B,A)
+    temp2= vec3.subtract(temp2,C,B)
+    n = vec3.cross(n,temp,temp2)
+
+    let D = 0;
+    D = vec3.dot(n.map(x =>-x), A)
+    // Equation = n_x X + n_y Y + n_z Z - D = 0
+    return n.concat(D)
+}
+
+const distance_point_to_plane = (plane_equation, point) => {
+    let new_point = point.slice(0,3)
+    let num = Math.abs(plane_equation[0]*new_point[0] + 
+        plane_equation[1]*new_point[1] + 
+        plane_equation[2]*new_point[2] + plane_equation[3])
+    let denum = Math.sqrt(plane_equation.slice(0,3).map(x => x*x).reduce((a,b) => a+b, 0))
+    // console.log(num,denum,num/denum);
+    return num/denum
 }
 
 let rR = 0
@@ -356,6 +378,15 @@ let arahY = 1.0;
 let arahZ = 1.0;
 let rotater = 1.0;
 
+let KUBUS = {
+    TOP : null,
+    BOTTOM : null,
+    FRONT : null,
+    BACK : null,
+    RIGHT : null,
+    LEFT : null,
+}
+
 const drawScene = () => {
     gl.viewport(0,0,gl.viewportWidth, gl.viewportHeight)
     gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT)
@@ -366,11 +397,11 @@ const drawScene = () => {
 
     mat4.translate(mvMatrix, mvMatrix, [-1.0, 5.0,-50.0])
 
-    // mat4.rotate(mvMatrix, mvMatrix, glMatrix.toRadian(10), [0.0, 0.01, 0.0])
+    mat4.rotate(mvMatrix, mvMatrix, glMatrix.toRadian(rSquare), [0.0, 0.01, 0.0])
 
     mvPushMatrix()
     mat4.translate(mvMatrix, mvMatrix, [movementXR, movementYR, movementZR])
-    mat4.rotate(mvMatrix, mvMatrix, glMatrix.toRadian(rR), [0.0, rotater*1.0, 0.0])
+    mat4.rotate(mvMatrix, mvMatrix, glMatrix.toRadian(rR), [0.0, 1.0, 0.0])
     mat4.translate(mvMatrix, mvMatrix, [-RWidth/2.0, -RHeight/2.0, -RThick/2.0])
     
     gl.bindBuffer(gl.ARRAY_BUFFER, RPositionBuffer)
@@ -390,7 +421,7 @@ const drawScene = () => {
 
     mat4.translate(mvMatrix, mvMatrix, [1.5, -5.0, 0.0])
     mvPushMatrix()
-    mat4.translate(mvMatrix, mvMatrix, [-0.5, 0.0, -0.5])
+    //mat4.translate(mvMatrix, mvMatrix, [-0.5, 0.0, -0.5])
     
     gl.bindBuffer(gl.ARRAY_BUFFER, CubePositionBuffer)
     gl.vertexAttribPointer(shaderProgram.vertexPositionAttribute, CubePositionBuffer.itemSize, gl.FLOAT, false, 0, 0)
@@ -403,11 +434,29 @@ const drawScene = () => {
         let temp = matrix_multiplication(mvMatrix,CubeVertices[v]);
         current_position_cube.push(temp);
     }
+
+    // Cube skeleton
+    //      H(7)             G(6)
+    // E(3)            F(2)
+    // 
+    // 
+    // 
+    // 
+    //      D(4)             C(5)
+    // A(0)            B(1)
+    
+    KUBUS.TOP = plane_from_point(current_position_cube[3], current_position_cube[2], current_position_cube[6])
+    KUBUS.BOTTOM = plane_from_point(current_position_cube[0], current_position_cube[1], current_position_cube[4])
+    KUBUS.RIGHT = plane_from_point(current_position_cube[1], current_position_cube[2], current_position_cube[5])
+    KUBUS.LEFT = plane_from_point(current_position_cube[0], current_position_cube[3], current_position_cube[4])
+    KUBUS.FRONT = plane_from_point(current_position_cube[0], current_position_cube[1], current_position_cube[2])
+    KUBUS.BACK = plane_from_point(current_position_cube[4], current_position_cube[5], current_position_cube[6])
+
     setMatrixUniform()
     gl.drawElements(gl.LINES, CubeVertexIndexBuffer.numItems, gl.UNSIGNED_SHORT, 0)
     mvPopMatrix()
 
-    a = detect_collision(current_position_r, current_position_cube)
+    a = detect_collision(current_position_r, KUBUS, current_position_cube)
 }
 
 let lastTime = 0
@@ -422,8 +471,8 @@ const animate = () => {
     let timeNow = new Date().getTime()
     if(lastTime != 0){
         let elapsed = timeNow - lastTime
-        rR += (100 * elapsed) / 1000.0
-        rSquare += (100 * elapsed) / 1000.0
+        rR += (rotater)*(100 * elapsed) / 1000.0
+        rSquare += (10 * elapsed) / 1000.0
         updateRPos()
     }
     lastTime = timeNow
@@ -455,13 +504,16 @@ const matrix_multiplication = (a,b) => {
     return [c1,c2,c3,c4]
 }
 
-const detect_collision = (current_position_r, current_position_cube) => {
+const detect_collision = (current_position_r, KUBUS, current_position_cube) => {
     nabrak = false
-    // Front
+    // TOP
     for(i = 0; i < current_position_r.length; i++){
-        if(!(
-            current_position_r[i][1] <= current_position_cube[2][1] 
-        )){
+        // console.log(current_position_r[i])
+        // console.log(current_position_cube)
+        // console.log(KUBUS.TOP)
+        if(
+            distance_point_to_plane(KUBUS.TOP, current_position_r[i]) < 0.1
+        ){
             if(arahY > 0){
                 arahY *= -1.0
                 rotater *= -1.0
@@ -470,11 +522,11 @@ const detect_collision = (current_position_r, current_position_cube) => {
             return false
         }
     }
-    // Back
+    // BOTTOM
     for(i = 0; i < current_position_r.length; i++){
-        if(!(
-            current_position_r[i][1] >= current_position_cube[4][1]
-        )){
+        if(
+            distance_point_to_plane(KUBUS.BOTTOM, current_position_r[i]) < 0.1
+        ){
             if(arahY < 0){
                 arahY *= -1.0
                 rotater *= -1.0
@@ -483,11 +535,11 @@ const detect_collision = (current_position_r, current_position_cube) => {
             return false
         }
     }
-    // Top
+    // FRONT
     for(i = 0; i < current_position_r.length; i++){
-        if(!(
-            current_position_r[i][2] <= current_position_cube[3][2]
-        )){
+        if(
+            distance_point_to_plane(KUBUS.FRONT, current_position_r[i]) < 0.1
+        ){
             if(arahZ > 0) {
                 arahZ *= -1.0
                 rotater *= -1.0
@@ -496,11 +548,11 @@ const detect_collision = (current_position_r, current_position_cube) => {
             return false
         }
     }
-    // Bottom
+    // BACK
     for(i = 0; i < current_position_r.length; i++){
-        if(!(
-            current_position_r[i][2] >= current_position_cube[5][2]
-        )){
+        if(
+            distance_point_to_plane(KUBUS.BACK, current_position_r[i]) < 0.1
+        ){
             if(arahZ < 0) {
                 arahZ *= -1.0
                 rotater *= -1.0
@@ -511,9 +563,9 @@ const detect_collision = (current_position_r, current_position_cube) => {
     }
     // Right
     for(i = 0; i < current_position_r.length; i++){
-        if(!(
-            current_position_r[i][0] <= current_position_cube[5][0]
-        )){
+        if(
+            distance_point_to_plane(KUBUS.RIGHT, current_position_r[i]) < 0.1
+        ){
             if(arahX > 0){
                 arahX *= -1.0
                 rotater *= -1.0
@@ -524,9 +576,9 @@ const detect_collision = (current_position_r, current_position_cube) => {
     }
     // Left
     for(i = 0; i < current_position_r.length; i++){
-        if(!(
-            current_position_r[i][0] >= current_position_cube[4][0]
-        )){
+        if(
+            distance_point_to_plane(KUBUS.LEFT, current_position_r[i]) < 0.1
+        ){
             if(arahX < 0){
                 arahX *= -1.0
                 rotater *= -1.0
